@@ -1,0 +1,16 @@
+body{
+    font-family: "Times New Roman", Times, serif;
+}
+.bluetitle {
+    border: 2px;
+    margin: 10px;    
+}
+.title{
+    color: white;
+    background: navy;
+}
+.container{
+    border-bottom: 15px;
+    border:navy;
+    border-style: solid;
+}
