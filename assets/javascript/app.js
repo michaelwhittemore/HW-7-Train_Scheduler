@@ -1,7 +1,10 @@
+//i did the framework of this assignment before we covered push() 
+//and 'child_added", which is why the code is kinda wonky and 
+//only uses .set()
+
 //data object gets passed to data base and conatins array for each 
 //value of the train info
 var data = { names: [], destinations: [], times: [], frequencies: [] }
-console.log(data) //test
 //the database
 var database = firebase.database();
 //onload should populate the schedule
@@ -9,14 +12,22 @@ database.ref().on("value", function (snapshot) {
     data = snapshot.val()
     updateCol(data)
 })
+
+
 //on submit should push the changes to the local array and
 //the database and then reconstruct the table
 $("#submit").click(function () {
     event.preventDefault();
-    var name = $("#name").val();
-    var destination = $("#destination").val();
+    var name = $("#name").val().trim();
+    var destination = $("#destination").val().trim();
     var time = $("#time").val();
-    var frequency = $("#frequency").val();
+    var frequency = $("#frequency").val().trim();
+    if ([name, destination, time, frequency].includes("")) {
+        console.log([name, destination, time, frequency])
+        alert("please fill in all fields")
+        return;
+    }
+    easterEggChecker(name);
     updateDatabase(name, destination, time, frequency)
     updateCol(data)
 })
@@ -24,7 +35,7 @@ $("#submit").click(function () {
 //the database
 $("#clear").click(function () {
     event.preventDefault();
-    data = { names: [], destinations: [], times: [], frequencies: [] }
+    data = { names: [""], destinations: [""], times: [""], frequencies: [""] }
     console.log(data)
     database.ref().set(data)
     updateCol(data)
@@ -52,8 +63,8 @@ updateDatabase = function (name, des, time, fre) {
 //takes in the object with the properties described in the top
 //and makes all the columns
 updateCol = function (dataObject) {
-    if (dataObject==null){
-        dataObject={names:[],destinations:[],times:[],frequencies:[]}
+    if (dataObject == null) {
+        dataObject = { names: [], destinations: [], times: [], frequencies: [] }
     }
     $("#trainholder").empty()
     for (i in dataObject.names) {
@@ -62,7 +73,22 @@ updateCol = function (dataObject) {
 }
 
 
+//don't forget to add eastereggs, crazy train, night train,city of new orleans
+easterEggChecker = function (name) {
+    if (name == 'Nightrain' || name == 'Night Train') {
+        $("body").css("background-image", "url('./assets/images/appetite_for_destruction.jpg')");
+    }
+    else if (name == 'Crazy Train') {
+        $("body").css("background-image", "url('./assets/images/blizzard.jpg")
+    }
+    else if (name == 'The City of New Orleans') {
+        $("body").css("background-image", "url('./assets/images/city.jpg")
+    }
+    else if (name == 'Love Train') {
+        $("body").css("background-image", "url('./assets/images/love.jpg")
+    }
+    else {
+        $("body").css("background-image","")
+    }
 
-//should have a button to clear the database
-
-//don't forget to add eastereggs
+}
