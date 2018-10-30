@@ -1,6 +1,6 @@
 //i did the framework of this assignment before we covered push() 
 //and 'child_added", which is why the code is kinda wonky and 
-//only uses .set()
+//only uses .set() and "value"
 
 //data object gets passed to data base and conatins array for each 
 //value of the train info
@@ -22,9 +22,8 @@ $("#submit").click(function () {
     var destination = $("#destination").val().trim();
     var time = $("#time").val();
     var frequency = $("#frequency").val().trim();
-    if ([name, destination, time, frequency].includes("")) {
-        console.log([name, destination, time, frequency])
-        alert("please fill in all fields")
+    if ([name, destination, time, frequency].includes("")||time.length!=4) {
+        alert("please fill in all fields, the time must be four digits")
         return;
     }
     easterEggChecker(name);
@@ -36,19 +35,22 @@ $("#submit").click(function () {
 $("#clear").click(function () {
     event.preventDefault();
     data = { names: [""], destinations: [""], times: [""], frequencies: [""] }
-    console.log(data)
     database.ref().set(data)
     updateCol(data)
-    console.log(data)
 })
 //this function makes a row entry
 makeCol = function (name, des, time, fre) {
+    if (name===""){
+        return
+    }
     var row = $("<div class='row'>");
+    var nextArrival = timeCalculator(time, fre)[0];
+    var minutesAway = timeCalculator(time, fre)[1];
     row.append(`<div class='col'> ${name} </div>`);
     row.append(`<div class='col'> ${des} </div>`);
-    row.append(`<div class='col'> ${time} </div>`);
     row.append(`<div class='col'> ${fre} </div>`);
-    row.append(`<div class='col'> ${' '} </div>`); //this should be the arrival time
+    row.append(`<div class='col'> ${nextArrival} </div>`);
+    row.append(`<div class='col'> ${minutesAway} </div>`);
     $("#trainholder").append(row)
 }
 //this updates the local array and sets it in the database
@@ -66,14 +68,30 @@ updateCol = function (dataObject) {
     if (dataObject == null) {
         dataObject = { names: [], destinations: [], times: [], frequencies: [] }
     }
+
     $("#trainholder").empty()
     for (i in dataObject.names) {
         makeCol(dataObject.names[i], dataObject.destinations[i], dataObject.times[i], dataObject.frequencies[i])
     }
+
+}
+//this function should take in a time and frequency
+//and return the next arrrival and minutes away
+//uses code from train-example.html
+timeCalculator = function (firstTime, tFrequency) {
+    var firstTimeConverted = moment(firstTime, "HHmm").subtract(1, "years");
+    var diffTime = moment().diff(moment(firstTimeConverted), "minutes");
+    var tRemainder = diffTime % tFrequency;
+    var tMinutesTillTrain = tFrequency - tRemainder;
+    var nextTrain = moment().add(tMinutesTillTrain, "minutes");
+    var nextTrainFormatted = moment(nextTrain).format("hh:mm")
+
+    return ([nextTrainFormatted, tMinutesTillTrain])
+
+
 }
 
 
-//don't forget to add eastereggs, crazy train, night train,city of new orleans
 easterEggChecker = function (name) {
     if (name == 'Nightrain' || name == 'Night Train') {
         $("body").css("background-image", "url('./assets/images/appetite_for_destruction.jpg')");
@@ -88,7 +106,7 @@ easterEggChecker = function (name) {
         $("body").css("background-image", "url('./assets/images/love.jpg")
     }
     else {
-        $("body").css("background-image","")
+        $("body").css("background-image", "")
     }
 
 }

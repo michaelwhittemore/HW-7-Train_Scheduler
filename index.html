@@ -8,6 +8,7 @@
   <title>Train Scheduler</title>
   <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.5/firebase.js"></script>
+  <script src="https://cdn.jsdelivr.net/momentjs/2.12.0/moment.min.js"></script>
   <link rel="stylesheet" href="assets/css/style.css">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <script>
@@ -63,8 +64,8 @@
         <input type="text" id="name"><br>
         Destination: <br>
         <input type="text" id="destination"> <br>
-        First Train Time(hours-min miltary time):<br>
-        <input type="time" id="time"> <br>
+        First Train Time(HHMM miltary time):<br>
+        <input type="number" id="time"> <br>
         Train Frequency (min):<br>
         <input type="number" id="frequency"> <br>
         <input type="submit" class="title" id="submit" value="Submit">
@@ -73,8 +74,7 @@
     </div>
   </div>
 
-  <!--easteregg-->
-  <div id="metalzone"></div>
+  
   <script src="assets/javascript/app.js"></script>
 </body>
 
